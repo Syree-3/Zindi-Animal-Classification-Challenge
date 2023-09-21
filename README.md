@@ -1,7 +1,7 @@
 # Zindi-Animal-Classification-Challenge
 Solving Zindi's Animal Classification Challenge 🏆. Classify zebras in 13,999 images using deep learning.
 
-#Import libraries 
+# Import libraries #
 import os
 import numpy as np
 import pandas as pd
@@ -76,7 +76,7 @@ for fold, (train_index, val_index) in enumerate(skf.split(X_train_sample, y_trai
     X_train, X_val = X_train_sample[train_index], X_train_sample[val_index]
     y_train, y_val = y_train_sample[train_index], y_train_sample[val_index]
 
-    # Data augmentation for training
+# Data augmentation for training #
     train_datagen = ImageDataGenerator(
         rotation_range=20,
         width_shift_range=0.2,
@@ -87,11 +87,11 @@ for fold, (train_index, val_index) in enumerate(skf.split(X_train_sample, y_trai
         fill_mode='nearest'
     )
 
-    # Define MobileNetV2 base model
+# Define MobileNetV2 base model #
     base_model = MobileNetV2(weights='imagenet', include_top=False, input_shape=(img_width, img_height, 3))
     base_model.trainable = True
 
-    # Create a custom model on top of the base model
+# Create a custom model on top of the base model #
     model = Sequential([
         base_model,
         GlobalAveragePooling2D(),
@@ -101,15 +101,15 @@ for fold, (train_index, val_index) in enumerate(skf.split(X_train_sample, y_trai
         Dense(1, activation='sigmoid')
     ])
 
-    # Compile the model
+# Compile the model #
     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
-    # Data generators
+# Data generators #
     train_generator = train_datagen.flow(X_train, y_train, batch_size=batch_size)
     val_datagen = ImageDataGenerator()
     val_generator = val_datagen.flow(X_val, y_val, batch_size=batch_size)
 
-    # Train the model
+# Train the model #
     model.fit(
         train_generator,
         steps_per_epoch=len(X_train) // batch_size,
@@ -118,7 +118,7 @@ for fold, (train_index, val_index) in enumerate(skf.split(X_train_sample, y_trai
         epochs=epochs
     )
 
-    # Define data directories
+# Define data directories #
 data_dir = '/content/drive/MyDrive/Data'
 train_elephants_dir = os.path.join(data_dir, 'train_elephants')
 train_zebras_dir = os.path.join(data_dir, 'train_zebras')
@@ -143,7 +143,7 @@ for filename in expected_test_filenames:
         img_array = img_array / 255.0  # Normalize the image
         img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
 
-        # Predict using the model
+# Predict using the model #
         prediction = model.predict(img_array)[0][0]
         label = 1 if prediction >= 0.5 else 0
     else:
