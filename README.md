@@ -159,8 +159,3 @@ submission = pd.DataFrame(results, columns=['id', 'label'])
 submission.to_csv('/content/drive/MyDrive/Data/zebra_vs_elephant_submission9.csv', index=False)
 
 
-    # Predict on the test data
-    test_datagen = ImageDataGenerator()
-    test_generator = test_datagen.flow(test_imgs, batch_size=1, shuffle=False)
-    predictions = model.predict(test_generator)
-
